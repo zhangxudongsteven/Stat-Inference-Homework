@@ -58,7 +58,20 @@ The distribution of means is as followed:
 ggplot(data.frame(exp.means), aes(exp.means)) + geom_histogram(binwidth = 0.1) + geom_rug() + geom_vline(xintercept = mean(exp.means), size = 1, col = "red") + geom_vline(xintercept = 1 / lambda, size = 1, col = "orange") + stat_function(fun = dnorm, args = list(mean = 5, sd = 5)) + labs(title = "Distribution of Simulation means", x = "mean value", y = "")
 ```
 
-We can see from the diagram that the distribution is approximately normal.  
+We can see from the diagram that the distribution may be approximately normal. To make sure, we will perform a Shapiro-Wilk normality test on the means.
+
+```{r Shapiro-Wilk}
+shapiro.test(exp.means)
+```
+
+From the test, the distribution is not normal enough. To make further analysis, we draw a *qqnorm* plot to do double check. 
+
+```{r qqplot}
+qqnorm(exp.means)
+qqline(exp.means, col = 2)
+```
+
+The result seems fine. It's really hard to judge the distribution's normaliblity. So many factor would effect the result. We have to choose our standerd.
 
 ## 4 - Summary
 

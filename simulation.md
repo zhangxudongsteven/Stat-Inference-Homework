@@ -46,12 +46,41 @@ The variance of simulations which is **0.6090837**, and the theoretical variance
  
 ### 3.3 - Distribution
 
+The distribution of means is as followed:
+
 
 ```r
 ggplot(data.frame(exp.means), aes(exp.means)) + geom_histogram(binwidth = 0.1) + geom_rug() + geom_vline(xintercept = mean(exp.means), size = 1, col = "red") + geom_vline(xintercept = 1 / lambda, size = 1, col = "orange") + stat_function(fun = dnorm, args = list(mean = 5, sd = 5)) + labs(title = "Distribution of Simulation means", x = "mean value", y = "")
 ```
 
 ![](simulation_files/figure-html/distribution-1.png)<!-- -->
+
+We can see from the diagram that the distribution may be approximately normal. To make sure, we will perform a Shapiro-Wilk normality test on the means.
+
+
+```r
+shapiro.test(exp.means)
+```
+
+```
+## 
+## 	Shapiro-Wilk normality test
+## 
+## data:  exp.means
+## W = 0.99326, p-value = 0.0001682
+```
+
+From the test, the distribution is not normal enough. To make further analysis, we draw a *qqnorm* plot to do double check. 
+
+
+```r
+qqnorm(exp.means)
+qqline(exp.means, col = 2)
+```
+
+![](simulation_files/figure-html/qqplot-1.png)<!-- -->
+
+The result seems fine. It's really hard to judge the distribution's normaliblity. So many factor would effect the result. We have to choose our standerd.
 
 ## 4 - Summary
 

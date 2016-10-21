@@ -1,0 +1,64 @@
+---
+title: "Stat-Inference Course Project B - Tooth Growth"
+author: "Steven"
+output: 
+  html_document:
+    keep_md: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(datasets)
+```
+
+## 1 - Synopsis
+
+In this analysis, we're going to analyze the ToothGrowth data in the R datasets package, summarise the data and sse confidence intervals and hypothesis tests to compare tooth growth by supp and dose.
+
+## 2 - Data Summarization
+
+```{r data.summarization}
+str(ToothGrowth)
+head(ToothGrowth)
+```
+
+The dose column is num type now, we will treat it as a factor kind variable. Let's have a look at their distribution.
+
+```{r distribution}
+g <- ggplot(ToothGrowth, aes(factor(dose), len))
+g + geom_boxplot() + facet_grid(. ~ supp)
+```
+
+## 3 - Hypothesis Test
+
+Now we are going to compare tooth growth by supply and dose. There is 3 kind of dose and 2 kind of supply. From the above analysis, the average len value of OJ may be larger than VC's. So we make the following hypothesis (with $\mu_0$ as the mean of OJ and the $\mu_1$ for the VC):
+
+ - $H_0$: $\mu_0$ = $\mu_1$
+ - $H_a$: $\mu_0$ > $\mu_1$
+
+we will compare our hypothesis under all three levels of dose. 
+
+```{r test.supply}
+df <- ToothGrowth
+OJ.5 <- df[df$dose==0.5,]$len[11:20]
+VC.5 <- df[df$dose==0.5,]$len[1:10]
+t.test(OJ.5, VC.5, alternative = "greater", var.equal = FALSE)
+OJ1 <- df[df$dose==1,]$len[11:20]
+VC1 <- df[df$dose==1,]$len[1:10]
+t.test(OJ1, VC1, alternative = "greater", var.equal = FALSE)
+OJ2 <- df[df$dose==2,]$len[11:20]
+VC2 <- df[df$dose==2,]$len[1:10]
+t.test(OJ2, VC2, alternative = "greater", var.equal = FALSE)
+# t.test(df[df$dose==0.5 && df$supp=="OJ",]$len, df[df$dose==0.5 && df$supp=="VC",]$len)
+```
+
+From the three tests above, we can see the len if OJ is larger than VC's under the 0.5 and 1.0 levels. However, under the 2.0 level, they are almost the same.
+
+## 4 - Summary
+
+This analysis is under the guidance of statistical inference course on Coursera. 
+
+```{r environment-summary}
+sessionInfo()
+```
